@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/signup");
 const generateOTP = require("../middleware/otpgenerator");
 const nodemailer = require("nodemailer");
+const {userSchema}=require("../Schema.js");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -22,7 +23,6 @@ const signup = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("All fields are mandatory!");
   }
-
   const otp = generateOTP();
 
   req.session.otp = otp;
@@ -50,7 +50,7 @@ const signup = asyncHandler(async (req, res) => {
 
 const verify = asyncHandler(async (req, res) => {
   const { otp } = req.body;
-
+ 
   // Convert otp to a string for comparison
   const otpString = String(otp);
   // console.log(otp);
